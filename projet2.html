@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not So Scary – Projet Vidéo | Enzo Ruiz</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projets.css">
+</head>
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav>
+    <a href="index.html" class="logo">
+        <img src="./images/Logo beige.svg" alt="Logo Enzo Ruiz">
+    </a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><span></span></button>
+    <ul>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="realisations.html">Réalisations</a></li>
+        <li><a href="contact.html">Me contacter</a></li>
+    </ul>
+</nav>
+
+<!-- ================= CONTENU PROJET ================= -->
+
+<section class="section-content">
+
+    <!-- Titre -->
+    <h1 class="show-on-scroll">Not So Scary – Projet Vidéo</h1>
+
+    <!-- Introduction -->
+    <p class="show-on-scroll">
+        Dans le cadre de notre BUT Métiers du Multimédia et de l’Internet à l’IUT de Haguenau, 
+        nous avons réalisé en équipe une vidéo pour le concours "Je Filme Ma Formation".  
+        À quatre, nous avons géré l’écriture, la réalisation et le montage, 
+        avec pour objectif de montrer ce qu’est vraiment le MMI.
+    </p>
+
+    <!-- VIDEO SEPARÉE -->
+    <div class="video-section show-on-scroll">
+        <div class="video-wrapper">
+            <iframe 
+                src="https://www.youtube-nocookie.com/embed/pRPhZYTs6jQ?si=eO0K7-PAffHQ-IJC" 
+                title="Not So Scary - Je Filme Ma Formation" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <p class="show-on-scroll">
+        Nous avons choisi un ton décalé et léger pour donner envie de découvrir la formation 
+        sans se prendre la tête. La vidéo a été montée sur DaVinci Resolve et After Effects, 
+        et notre équipe a géré toutes les étapes : réalisation, tournage et montage.
+    </p>
+
+    <p class="show-on-scroll">
+        La vidéo a été sélectionnée par le jury du concours et diffusée lors de la cérémonie officielle 
+        au Grand Rex à Paris.
+    </p>
+
+    <!-- PHOTO DIPLOME -->
+    <div class="project-gallery show-on-scroll fiche-gallery">
+        <div class="image-wrapper large">
+            <img src="images/Not_so_scarry/Diplôme Enzo Ruiz de conejo.jpg" alt="Diplôme / invitation Grand Rex">
+        </div>
+    </div>
+
+    <p class="show-on-scroll">
+        Ce projet nous a permis de :<br>
+        - Travailler en équipe sur un projet complet<br>
+        - Gérer la pré-prod, le tournage et le montage<br>
+        - Explorer différentes techniques de prise de vues et d’écriture vidéo<br>
+        - Valoriser notre formation et nos compétences
+    </p>
+
+</section>
+
+
+<!-- ================= LIGHTBOX ================= -->
+
+<div class="lightbox" id="lightbox">
+    <span class="close">&times;</span>
+    <img class="lightbox-img" id="lightbox-img">
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+    // ===== LIGHTBOX =====
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const images = document.querySelectorAll(".project-gallery img");
+    const closeBtn = document.querySelector(".close");
+
+    images.forEach(img => {
+        img.addEventListener("click", () => {
+            lightbox.style.display = "flex";
+            lightboxImg.src = img.src;
+        });
+    });
+
+    closeBtn.addEventListener("click", () => {
+        lightbox.style.display = "none";
+    });
+
+    lightbox.addEventListener("click", e => {
+        if(e.target !== lightboxImg) lightbox.style.display = "none";
+    });
+
+    // ===== ANIMATION AU SCROLL =====
+    const scrollElements = document.querySelectorAll(".show-on-scroll");
+
+    const elementInView = (el, offset = 0) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return elementTop <= (window.innerHeight || document.documentElement.clientHeight) - offset;
+    };
+
+    const displayScrollElement = (element) => {
+        element.classList.add("visible");
+    };
+
+    const handleScrollAnimation = () => {
+        scrollElements.forEach(el => {
+            if (elementInView(el, 100)) {
+                displayScrollElement(el);
+            }
+        })
+    }
+
+    window.addEventListener("scroll", handleScrollAnimation);
+    window.addEventListener("load", handleScrollAnimation);
+</script>
+
+</body>
+<script src="nav.js"></script>
+</html>

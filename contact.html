@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Enzo Ruiz</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    /* basic styling for contact form elements */
+    form#contactForm{max-width:700px;margin:20px auto;padding:18px;border-radius:8px;background:#f9f9f9}
+    label{display:block;margin:8px 0 4px;font-weight:600}
+    input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;}
+    .btn{margin-top:12px;padding:10px 16px;border:0;background:#222;color:#fff;border-radius:4px;cursor:pointer;}
+    .mb-3{margin-bottom:1rem;}
+    .form-text{font-size:0.875rem;}
+    .text-danger{color:#c00;}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">
+            <img src="./images/Logo beige.svg" alt="Logo Enzo Ruiz">
+        </a>
+        <button class="burger" aria-label="Menu" aria-expanded="false"><span></span></button>
+        <ul>
+            <li><a href="cv.html">CV</a></li>
+            <li><a href="realisations.html">Réalisations</a></li>
+            <li><a href="contact.html">Me contacter</a></li>
+        </ul>
+    </nav>
+    
+
+<section class="section-content">
+        <h2>Me Contacter</h2>
+        <p>Email : <a href="mailto:er.studiofr@outlook.com">er.studiofr@outlook.com</a></p>
+        <p>Linktree : <a id="linktree" href="https://linktr.ee/enzo_ruiz" target="_blank" rel="noopener noreferrer">Mon Linktree</a></p>
+                    <h2>Formulaire de Contact</h2>
+            <form id="contactForm" action="https://formsubmit.co/er.studiofr@outlook.com" method="POST"
+                style="max-width: 600px; margin-top: 1.5rem;">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nom *</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                        pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+                        title="Veuillez entrer une adresse email valide" required>
+                    <small class="form-text text-danger" id="emailError" style="display: none;">Email invalide. Veuillez
+                        vérifier votre adresse.</small>
+                </div>
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Sujet *</label>
+                    <input type="text" class="form-control" id="subject" name="subject" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message *</label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <input type="hidden" name="_captcha" value="false">
+                </div>
+                <div class="mb-3">
+                    <input type="hidden" name="_next" value="https://erstudiofr.github.io/mon-portfolio/contact.html">
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="_honey" style="display:none">
+                </div>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+        </div>
+
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('status');
+    if(form && status){
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            status.textContent = '';
+            const data = new FormData(form);
+            fetch(form.action, { method: 'POST', body: data })
+                .then(response => {
+                    if(response.ok){
+                        form.reset();
+                        status.textContent = 'Message envoyé. Merci !';
+                        status.style.color = 'green';
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .catch(err => {
+                    status.textContent = 'Impossible d\'envoyer le message. Vérifiez votre connexion ou contactez-moi par mail.';
+                    status.style.color = '#c00';
+                });
+        });
+    }
+});
+</script>
+
+<script src="nav.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet – Packshot Ciao Kombucha | Enzo Ruiz</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projets.css">
+</head>
+
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav>
+    <a href="index.html" class="logo">
+        <img src="./images/Logo beige.svg" alt="Logo Enzo Ruiz">
+    </a>
+
+    <button class="burger" aria-label="Menu" aria-expanded="false">
+        <span></span>
+    </button>
+
+    <ul>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="realisations.html">Réalisations</a></li>
+        <li><a href="contact.html">Me contacter</a></li>
+    </ul>
+</nav>
+
+<!-- ================= CONTENU PROJET ================= -->
+
+<section class="section-content">
+
+    <h1 class="show-on-scroll">Packshot – Ciao Kombucha</h1>
+
+    <p class="show-on-scroll">
+        Dans le cadre d’un projet créatif, j’ai réalisé un packshot publicitaire fictif pour la marque 
+        Ciao Kombucha. L’objectif était de produire une courte publicité mettant en valeur le produit 
+        à travers une mise en scène visuelle inspirée des codes de la publicité produit.
+    </p>
+
+    <p class="show-on-scroll">
+        Mon intention était de créer une publicité dynamique avec beaucoup de rythme afin de capter 
+        rapidement l’attention du spectateur et de donner de l’énergie au produit. J’ai réalisé 
+        l’ensemble du projet : le tournage, le montage vidéo ainsi que le motion design.
+    </p>
+
+    <!-- ================= VIDEO ================= -->
+
+    <div class="video-section show-on-scroll">
+
+        <div class="video-wrapper">
+
+            <iframe 
+            src="https://www.youtube.com/embed/_W2pUNB4Gg8?si=Mlgsu5-qVP2XyVhi"
+            title="Publicité fictive Ciao Kombucha"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+            </iframe>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+    // ===== ANIMATION AU SCROLL =====
+
+    const scrollElements = document.querySelectorAll(".show-on-scroll");
+
+    const elementInView = (el, offset = 0) => {
+
+        const elementTop = el.getBoundingClientRect().top;
+
+        return elementTop <= (window.innerHeight || document.documentElement.clientHeight) - offset;
+
+    };
+
+    const displayScrollElement = (element) => {
+
+        element.classList.add("visible");
+
+    };
+
+    const handleScrollAnimation = () => {
+
+        scrollElements.forEach(el => {
+
+            if (elementInView(el, 100)) {
+
+                displayScrollElement(el);
+
+            }
+
+        })
+
+    }
+
+    window.addEventListener("scroll", handleScrollAnimation);
+    window.addEventListener("load", handleScrollAnimation);
+
+</script>
+
+<script src="nav.js"></script>
+
+</body>
+</html>

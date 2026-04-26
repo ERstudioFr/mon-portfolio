@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferrari 458 – Projet Photo | Enzo Ruiz</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projets.css">
+</head>
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav>
+    <a href="index.html" class="logo">
+        <img src="./images/Logo beige.svg" alt="Logo Enzo Ruiz">
+    </a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><span></span></button>
+    <ul>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="realisations.html">Réalisations</a></li>
+        <li><a href="contact.html">Me contacter</a></li>
+    </ul>
+</nav>
+
+<!-- ================= CONTENU PROJET ================= -->
+
+<section class="section-content">
+
+    <h1 class="show-on-scroll">Ferrari 458 – Photographie & Direction Artistique</h1>
+
+    <p class="show-on-scroll">
+        Ce projet est né d’une prise de vue réalisée en milieu urbain. 
+        J’ai photographié cette Ferrari 458 dans la rue, en cherchant à capturer 
+        ses lignes agressives et son caractère emblématique.  
+        Les images ont ensuite été retouchées et retravaillées sous Photoshop 
+        afin de développer une identité visuelle forte et cohérente.
+    </p>
+
+    <!-- Galerie principale -->
+    <div class="project-gallery show-on-scroll">
+
+        <div class="image-wrapper">
+            <img src="./images/Ferrari/face.jpg" alt="Ferrari 458 vue avant">
+        </div>
+
+        <div class="image-wrapper">
+            <img src="./images/Ferrari/cote.jpg" alt="Ferrari 458 détail">
+        </div>
+
+        <div class="image-wrapper">
+            <img src="./images/Ferrari/profil fefe.jpg" alt="Ferrari 458 profil">
+        </div>
+
+    </div>
+
+    <!-- Partie fiche informative -->
+    <p class="show-on-scroll">
+        À partir de ces photographies, j’ai conçu une fiche informative mettant en valeur 
+        les caractéristiques techniques et l’esthétique du modèle.  
+        L’objectif était de combiner photographie, retouche et mise en page 
+        pour créer un rendu visuel impactant et professionnel.
+    </p>
+
+    <div class="project-gallery fiche-gallery show-on-scroll">
+
+        <div class="image-wrapper large">
+            <img src="images/Ferrari/Ferrariface.jpg" alt="Fiche informative Ferrari 458">
+        </div>
+    
+        <div class="image-wrapper large">
+            <img src="images/Ferrari/fefevfinal.jpg" alt="Mise en page finale Ferrari 458">
+        </div>
+    
+    </div>
+
+</section>
+
+<!-- ================= LIGHTBOX ================= -->
+
+<div class="lightbox" id="lightbox">
+    <span class="close">&times;</span>
+    <img class="lightbox-img" id="lightbox-img">
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+    // ===== LIGHTBOX =====
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const images = document.querySelectorAll(".project-gallery img");
+    const closeBtn = document.querySelector(".close");
+
+    images.forEach(img => {
+        img.addEventListener("click", () => {
+            lightbox.style.display = "flex";
+            lightboxImg.src = img.src;
+        });
+    });
+
+    closeBtn.addEventListener("click", () => {
+        lightbox.style.display = "none";
+    });
+
+    lightbox.addEventListener("click", e => {
+        if(e.target !== lightboxImg) lightbox.style.display = "none";
+    });
+
+    // ===== ANIMATION AU SCROLL =====
+    const scrollElements = document.querySelectorAll(".show-on-scroll");
+
+    const elementInView = (el, offset = 0) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return elementTop <= (window.innerHeight || document.documentElement.clientHeight) - offset;
+    };
+
+    const displayScrollElement = (element) => {
+        element.classList.add("visible");
+    };
+
+    const handleScrollAnimation = () => {
+        scrollElements.forEach(el => {
+            if (elementInView(el, 100)) {
+                displayScrollElement(el);
+            }
+        })
+    }
+
+    window.addEventListener("scroll", handleScrollAnimation);
+    window.addEventListener("load", handleScrollAnimation);
+</script>
+
+</body>
+<script src="nav.js"></script>
+</html>

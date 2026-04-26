@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet 6 – Titre à venir | Enzo Ruiz</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="projets.css">
+    <link rel="stylesheet" href="magazine.css">
+</head>
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav>
+    <a href="index.html" class="logo">
+        <img src="./images/Logo beige.svg" alt="Logo Enzo Ruiz">
+    </a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><span></span></button>
+    <ul>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="realisations.html">Réalisations</a></li>
+        <li><a href="contact.html">Me contacter</a></li>
+    </ul>
+</nav>
+
+<!-- ================= CONTENU PROJET ================= -->
+
+<section class="section-content">
+
+    <h1 class="show-on-scroll">titre du projet 6</h1>
+
+    <p class="show-on-scroll">
+        Description de ce projet. Remplacez ce texte par votre propre contenu lorsque le projet sera prêt.
+    </p>
+
+    <!-- Visionneuse Magazine PDF -->
+    <div class="magazine-container show-on-scroll">
+        <div class="magazine-controls">
+            <button id="prevBtn" onclick="changePage(-1)">← Précédent</button>
+            <span class="page-counter"><span id="currentPage">1</span> / <span id="totalPages">1</span></span>
+            <button id="nextBtn" onclick="changePage(1)">Suivant →</button>
+        </div>
+        
+        <div class="magazine-book" id="magazineBook">
+            <div class="spine"></div>
+            <div class="magazine-page page-left" id="pageLeft">
+                <div class="page-content">
+                    <img id="pageLeftImg" src="" alt="Page gauche">
+                    <span class="page-number" id="pageLeftNum">1</span>
+                </div>
+            </div>
+            <div class="magazine-page page-right" id="pageRight">
+                <div class="page-content">
+                    <img id="pageRightImg" src="" alt="Page droite">
+                    <span class="page-number" id="pageRightNum">2</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="no-magazine" id="noMagazine" style="display: none;">
+            <h3>Aucun magazine disponible</h3>
+            <p>Veuillez placer votre fichier PDF dans le dossier images et le nommer "magazine.pdf"</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    // Configuration PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    let pdfDoc = null;
+    let currentPage = 1;
+    let totalPages = 0;
+    let pageImages = [];
+    const scale = 1.5; // Qualité d'affichage
+
+    // Charger le PDF
+    async function loadMagazine() {
+        const pdfPath = 'images/magazine.pdf';
+        
+        try {
+            // Charger le document PDF
+            const loadingTask = pdfjsLib.getDocument(pdfPath);
+            pdfDoc = await loadingTask.promise;
+            totalPages = pdfDoc.numPages;
+            
+            // Convertir chaque page en image
+            for (let i = 1; i <= totalPages; i++) {
+                const page = await pdfDoc.getPage(i);
+                const viewport = page.getViewport({ scale: scale });
+                
+                // Créer un canvas pour le rendu
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                
+                // Rendre la page
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+                
+                // Convertir en image
+                pageImages.push(canvas.toDataURL('image/jpeg', 0.9));
+            }
+            
+            // Afficher les pages
+            updateDisplay();
+            document.getElementById('totalPages').textContent = Math.ceil(totalPages / 2);
+            
+        } catch (error) {
+            console.error('Erreur chargement PDF:', error);
+            document.querySelector('.magazine-container').style.display = 'none';
+            document.getElementById('noMagazine').style.display = 'block';
+        }
+    }
+
+    // Mettre à jour l'affichage des pages
+    function updateDisplay() {
+        const leftIndex = (currentPage - 1) * 2;
+        const rightIndex = leftIndex + 1;
+        
+        const pageLeftImg = document.getElementById('pageLeftImg');
+        const pageRightImg = document.getElementById('pageRightImg');
+        const pageLeftNum = document.getElementById('pageLeftNum');
+        const pageRightNum = document.getElementById('pageRightNum');
+        
+        // Page gauche
+        if (leftIndex < pageImages.length) {
+            pageLeftImg.src = pageImages[leftIndex];
+            pageLeftNum.textContent = leftIndex + 1;
+        } else {
+            pageLeftImg.src = '';
+            pageLeftNum.textContent = '';
+        }
+        
+        // Page droite
+        if (rightIndex < pageImages.length) {
+            pageRightImg.src = pageImages[rightIndex];
+            pageRightNum.textContent = rightIndex + 1;
+        } else {
+            pageRightImg.src = '';
+            pageRightNum.textContent = '';
+        }
+        
+        // Mettre à jour le compteur
+        document.getElementById('currentPage').textContent = currentPage;
+        
+        // Gérer les boutons
+        document.getElementById('prevBtn').disabled = currentPage <= 1;
+        document.getElementById('nextBtn').disabled = currentPage >= Math.ceil(totalPages / 2);
+        
+        // Animation de retournement
+        const book = document.getElementById('magazineBook');
+        if (currentPage > 1) {
+            book.classList.add('flipped');
+        } else {
+            book.classList.remove('flipped');
+        }
+    }
+
+    // Changer de page
+    function changePage(direction) {
+        const maxPages = Math.ceil(totalPages / 2);
+        const newPage = currentPage + direction;
+        
+        if (newPage >= 1 && newPage <= maxPages) {
+            currentPage = newPage;
+            updateDisplay();
+        }
+    }
+
+    // Navigation clavier
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') changePage(-1);
+        if (e.key === 'ArrowRight') changePage(1);
+    });
+
+    // Initialiser au chargement
+    window.addEventListener('load', loadMagazine);
+</script>
+
+</body>
+<script src="nav.js"></script>
+</html>
