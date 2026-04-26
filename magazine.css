@@ -70,6 +70,21 @@
     border-right: 1px solid #ccc;
 }
 
+.magazine-page.page-left.hidden {
+    visibility: hidden;
+}
+
+/* Première page seule : centrer la page de droite */
+.magazine-book.single-page .page-right {
+    left: 50%;
+    transform: translateX(-50%) !important;
+    transform-origin: center center;
+}
+
+.magazine-book.single-page .spine {
+    display: none;
+}
+
 .magazine-page.page-right {
     right: 0;
     left: auto;
@@ -91,6 +106,10 @@
     height: 100%;
     object-fit: contain;
     background: #f5f5f5;
+}
+
+.page-content img[style*="display: none"] {
+    display: none !important;
 }
 
 .page-number {

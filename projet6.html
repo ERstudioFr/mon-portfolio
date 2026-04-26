@@ -114,7 +114,13 @@
             
             // Afficher les pages
             updateDisplay();
-            document.getElementById('totalPages').textContent = Math.ceil(totalPages / 2);
+            // Vue 1 = page 1 seule, puis pages 2 par 2
+            // Si impair, la dernière page est seule
+            const remainingPages = totalPages - 1;
+            const pairs = Math.floor(remainingPages / 2);
+            const hasOddPage = remainingPages % 2 === 1;
+            const totalSpreads = 1 + pairs + (hasOddPage ? 1 : 0);
+            document.getElementById('totalPages').textContent = totalSpreads;
             
         } catch (error) {
             console.error('Erreur chargement PDF:', error);
@@ -125,8 +131,30 @@
 
     // Mettre à jour l'affichage des pages
     function updateDisplay() {
-        const leftIndex = (currentPage - 1) * 2;
-        const rightIndex = leftIndex + 1;
+        // Calcul du nombre de "vues" (spreads)
+        // Vue 1 = page 1 seule
+        // Vue 2+ = pages 2 par 2
+        const remainingPages = totalPages - 1;
+        const pairs = Math.floor(remainingPages / 2);
+        const hasOddPage = remainingPages % 2 === 1;
+        const totalSpreads = 1 + pairs + (hasOddPage ? 1 : 0);
+        
+        // Déterminer les indices des pages à afficher
+        let leftIndex, rightIndex;
+        
+        if (currentPage === 1) {
+            // Première vue : page 1 seule
+            leftIndex = -1;
+            rightIndex = 0;
+        } else if (currentPage === totalSpreads && hasOddPage) {
+            // Dernière vue si impair : dernière page seule
+            leftIndex = -1;
+            rightIndex = totalPages - 1;
+        } else {
+            // Vues du milieu : pages par paires
+            leftIndex = (currentPage - 2) * 2;
+            rightIndex = leftIndex + 1;
+        }
         
         const pageLeftImg = document.getElementById('pageLeftImg');
         const pageRightImg = document.getElementById('pageRightImg');
@@ -134,16 +162,26 @@
         const pageRightNum = document.getElementById('pageRightNum');
         
         // Page gauche
-        if (leftIndex < pageImages.length) {
-            pageLeftImg.src = pageImages[leftIndex];
-            pageLeftNum.textContent = leftIndex + 1;
-        } else {
+        if (currentPage === 1 || (currentPage === totalSpreads && hasOddPage)) {
+            // Première ou dernière vue seule
             pageLeftImg.src = '';
+            pageLeftImg.style.display = 'none';
             pageLeftNum.textContent = '';
+            document.querySelector('.page-left').style.visibility = 'hidden';
+        } else {
+            pageLeftImg.style.display = 'block';
+            document.querySelector('.page-left').style.visibility = 'visible';
+            if (leftIndex >= 0 && leftIndex < pageImages.length) {
+                pageLeftImg.src = pageImages[leftIndex];
+                pageLeftNum.textContent = leftIndex + 1;
+            } else {
+                pageLeftImg.src = '';
+                pageLeftNum.textContent = '';
+            }
         }
         
         // Page droite
-        if (rightIndex < pageImages.length) {
+        if (rightIndex >= 0 && rightIndex < pageImages.length) {
             pageRightImg.src = pageImages[rightIndex];
             pageRightNum.textContent = rightIndex + 1;
         } else {
@@ -153,26 +191,32 @@
         
         // Mettre à jour le compteur
         document.getElementById('currentPage').textContent = currentPage;
+        document.getElementById('totalPages').textContent = totalSpreads;
         
         // Gérer les boutons
         document.getElementById('prevBtn').disabled = currentPage <= 1;
-        document.getElementById('nextBtn').disabled = currentPage >= Math.ceil(totalPages / 2);
+        document.getElementById('nextBtn').disabled = currentPage >= totalSpreads;
         
-        // Animation de retournement
+        // Animation de retournement et classe CSS
         const book = document.getElementById('magazineBook');
-        if (currentPage > 1) {
-            book.classList.add('flipped');
-        } else {
+        if (currentPage === 1 || (currentPage === totalSpreads && hasOddPage)) {
             book.classList.remove('flipped');
+            book.classList.add('single-page');
+        } else {
+            book.classList.add('flipped');
+            book.classList.remove('single-page');
         }
     }
 
     // Changer de page
     function changePage(direction) {
-        const maxPages = Math.ceil(totalPages / 2);
+        const remainingPages = totalPages - 1;
+        const pairs = Math.floor(remainingPages / 2);
+        const hasOddPage = remainingPages % 2 === 1;
+        const totalSpreads = 1 + pairs + (hasOddPage ? 1 : 0);
         const newPage = currentPage + direction;
         
-        if (newPage >= 1 && newPage <= maxPages) {
+        if (newPage >= 1 && newPage <= totalSpreads) {
             currentPage = newPage;
             updateDisplay();
         }
@@ -183,6 +227,31 @@
         if (e.key === 'ArrowLeft') changePage(-1);
         if (e.key === 'ArrowRight') changePage(1);
     });
+
+    // ===== ANIMATION AU SCROLL =====
+    const scrollElements = document.querySelectorAll(".show-on-scroll");
+
+    const elementInView = (el, offset = 0) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return elementTop <= (window.innerHeight || document.documentElement.clientHeight) - offset;
+    };
+
+    const displayScrollElement = (element) => {
+        element.classList.add("visible");
+    };
+
+    const handleScrollAnimation = () => {
+        scrollElements.forEach(el => {
+            if (elementInView(el, 100)) {
+                displayScrollElement(el);
+            }
+        })
+    };
+
+    // Attacher les événements
+    window.addEventListener("scroll", handleScrollAnimation);
+    // Vérifier immédiatement au chargement
+    handleScrollAnimation();
 
     // Initialiser au chargement
     window.addEventListener('load', loadMagazine);
