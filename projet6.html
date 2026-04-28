@@ -30,10 +30,10 @@
 
 <section class="section-content">
 
-    <h1 class="show-on-scroll">titre du projet 6</h1>
+    <h1 class="show-on-scroll">Vivo – Magazine Hues</h1>
 
     <p class="show-on-scroll">
-        Description de ce projet. Remplacez ce texte par votre propre contenu lorsque le projet sera prêt.
+        Vivo est un magazine de photographie où la couleur est bien plus qu'une décoration : elle est l'essence du projet. Chaque image a été sélectionnée et travaillée pour explorer les relations subtiles entre teintes, luminosité et émotion. À travers ses pages, découvrez comment la palette chromatique transforme une simple photographie en narration visuelle captivante, donnant vie à chaque instant capturé.
     </p>
 
     <!-- Visionneuse Magazine PDF -->
@@ -152,7 +152,9 @@
             rightIndex = totalPages - 1;
         } else {
             // Vues du milieu : pages par paires
-            leftIndex = (currentPage - 2) * 2;
+            // currentPage 2 = pages 2 et 3 (indices 1 et 2)
+            // currentPage 3 = pages 4 et 5 (indices 3 et 4)
+            leftIndex = (currentPage - 1) * 2 - 1;
             rightIndex = leftIndex + 1;
         }
         
@@ -165,12 +167,8 @@
         if (currentPage === 1 || (currentPage === totalSpreads && hasOddPage)) {
             // Première ou dernière vue seule
             pageLeftImg.src = '';
-            pageLeftImg.style.display = 'none';
             pageLeftNum.textContent = '';
-            document.querySelector('.page-left').style.visibility = 'hidden';
         } else {
-            pageLeftImg.style.display = 'block';
-            document.querySelector('.page-left').style.visibility = 'visible';
             if (leftIndex >= 0 && leftIndex < pageImages.length) {
                 pageLeftImg.src = pageImages[leftIndex];
                 pageLeftNum.textContent = leftIndex + 1;
@@ -199,12 +197,13 @@
         
         // Animation de retournement et classe CSS
         const book = document.getElementById('magazineBook');
+        book.classList.remove('flipped');
+        book.classList.remove('single-page');
+        
         if (currentPage === 1 || (currentPage === totalSpreads && hasOddPage)) {
-            book.classList.remove('flipped');
             book.classList.add('single-page');
         } else {
             book.classList.add('flipped');
-            book.classList.remove('single-page');
         }
     }
 
@@ -250,11 +249,16 @@
 
     // Attacher les événements
     window.addEventListener("scroll", handleScrollAnimation);
-    // Vérifier immédiatement au chargement
-    handleScrollAnimation();
-
-    // Initialiser au chargement
-    window.addEventListener('load', loadMagazine);
+    
+    // Initialiser le magazine au chargement
+    if (document.readyState === 'loading') {
+        window.addEventListener('load', loadMagazine);
+    } else {
+        loadMagazine();
+    }
+    
+    // Vérifier les éléments scroll au chargement
+    window.addEventListener('load', handleScrollAnimation);
 </script>
 
 </body>
