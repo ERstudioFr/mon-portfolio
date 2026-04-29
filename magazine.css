@@ -6,6 +6,7 @@
     margin: 40px auto;
     perspective: 1500px;
     position: relative;
+    background: transparent;
 }
 
 .magazine-controls {
@@ -48,11 +49,15 @@
 
 .magazine-book {
     width: 100%;
-    height: 500px;
+    height: 650px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    gap: 0;
 }
 
 .magazine-page {
@@ -63,6 +68,10 @@
     display: flex;
     opacity: 1;
     transition: opacity 0.4s ease-in-out;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    gap: 0;
 }
 
 .magazine-page.page-left {
@@ -77,8 +86,7 @@
 .page-content {
     width: 100%;
     height: 100%;
-    background: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    background: transparent;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -89,7 +97,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: #f5f5f5;
+    background: transparent;
 }
 
 .page-number {
@@ -98,6 +106,7 @@
     font-size: 14px;
     color: #560000;
     font-weight: bold;
+    display: none;
 }
 
 .page-left .page-number {
