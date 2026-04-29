@@ -130,6 +130,22 @@ nav ul li a:hover {
     opacity: 1;
 }
 
+/* ================= CV PAGE ================= */
+.cv-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    min-height: calc(100vh - 120px);
+}
+
+.cv-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* ================= RESPONSIVE: tablettes / téléphones ================= */
 @media (max-width: 768px) {
     nav {
